@@ -8,12 +8,8 @@
 import SwiftUI
 
 struct QuizView: View {
-    @State private var quiz: Quiz
-    
-    init(quiz: Quiz) {
-        self.quiz = quiz
-    }
-    
+    @Environment(QuizGenerator.self) private var generator
+        
     var body: some View {
         NavigationStack {
             ZStack {
@@ -23,27 +19,32 @@ struct QuizView: View {
                 quizStack
             }
         }
+        .onAppear {
+            generator.generateQuiz()
+        }
     }
     
     private var quizStack: some View {
         VStack(spacing: 16) {
-            ForEach(quiz.questions, id: \.description) { question in
-                Text(question)
+            if let error = generator.error {
+                Label(error.localizedDescription, systemImage: "xmark.circle")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .foregroundStyle(Color.red)
+                    .padding(.horizontal)
+            }
+            
+            if let questions = generator.quiz?.questions {
+                ForEach(questions, id: \.description) { question in
+                    Text(question)
+                }
             }
         }
-        .navigationTitle("Sample Topic")
+        .navigationTitle(generator.topic)
         .padding()
     }
 }
 
 #Preview {
-    var sampleQuiz: Quiz {
-        Quiz(questions: [
-            "Question 1",
-            "Question 2",
-            "Question 3"
-        ])
-    }
-    
-    QuizView(quiz: sampleQuiz)
+    QuizView()
+        .environment(QuizGenerator(topic: "Cars"))
 }

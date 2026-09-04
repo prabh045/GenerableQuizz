@@ -10,5 +10,6 @@ import FoundationModels
 // Generable Macro so AI Model can give us back response of type Quiz
 @Generable
 struct Quiz {
+    @Guide(description: "The questions associated with this quiz.", .count(4))
     let questions: [String]
 }

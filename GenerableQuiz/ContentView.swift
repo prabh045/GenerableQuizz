@@ -10,14 +10,16 @@ import FoundationModels
 
 struct ContentView: View {
     var body: some View {
-        ZStack {
-            Color.gray.opacity(0.1)
-                .ignoresSafeArea(.all)
-            switch SystemLanguageModel.default.availability {
-            case .available:
-                topicSelectionView
-            case .unavailable(let reason):
-                UnAvailableView(reason: reason)
+        NavigationStack {
+            ZStack {
+                Color.gray.opacity(0.1)
+                    .ignoresSafeArea(.all)
+                switch SystemLanguageModel.default.availability {
+                case .available:
+                    topicSelectionView
+                case .unavailable(let reason):
+                    UnAvailableView(reason: reason)
+                }
             }
         }
     }
@@ -39,6 +41,7 @@ struct ContentView: View {
                         Image(systemName: "arrow.right")
                     }
                 }
+                .buttonStyle(.borderedProminent)
             }
 
         }

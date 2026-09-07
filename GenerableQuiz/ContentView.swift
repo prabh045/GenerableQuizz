@@ -15,11 +15,34 @@ struct ContentView: View {
                 .ignoresSafeArea(.all)
             switch SystemLanguageModel.default.availability {
             case .available:
-                Text("Hurrah")
+                topicSelectionView
             case .unavailable(let reason):
                 UnAvailableView(reason: reason)
             }
         }
+    }
+    
+    private var topicSelectionView: some View {
+        VStack(spacing: 16) {
+            Text("Pick a topic for your quiz")
+                .font(.title)
+            
+            ForEach(Topic.topics) { topic in
+                NavigationLink {
+                    QuizView()
+                        .environment(QuizGenerator(topic: topic.name))
+                } label: {
+                    HStack {
+                        Image(systemName: topic.imageName)
+                        Text(topic.name)
+                        Spacer()
+                        Image(systemName: "arrow.right")
+                    }
+                }
+            }
+
+        }
+        .padding()
     }
 }
 

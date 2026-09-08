@@ -15,8 +15,9 @@ struct QuizView: View {
             ZStack {
                 Color.gray.opacity(0.1)
                     .edgesIgnoringSafeArea(.all)
-                
-                quizStack
+                ScrollView {
+                    quizStack
+                }
             }
         }
         .onAppear {
@@ -34,8 +35,10 @@ struct QuizView: View {
             }
             
             if let questions = generator.quiz?.questions {
-                ForEach(questions, id: \.description) { question in
-                    Text(question)
+                ForEach(questions) { question in
+                    QuestionView(question: question)
+                        .disabled(generator.isGenerating)
+                        .padding(.vertical, 8)
                 }
             }
         }

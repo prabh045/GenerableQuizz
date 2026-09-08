@@ -14,8 +14,7 @@ struct AnswerView: View {
     
     var body: some View {
         Button {
-//
-
+            selectedAnswer = displayAnswer
         } label: {
             HStack {
                 Image(systemName: imageName)
@@ -60,8 +59,6 @@ struct AnswerView: View {
 
 
     VStack {
-        AnswerView(displayAnswer: correctAnswer!, selectedAnswer: $incorrectAnswer)
         AnswerView(displayAnswer: correctAnswer!, selectedAnswer: $correctAnswer)
-        AnswerView(displayAnswer: incorrectAnswer!, selectedAnswer: $incorrectAnswer)
     }
 }

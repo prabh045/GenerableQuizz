@@ -41,6 +41,15 @@ struct QuizView: View {
                         .padding(.vertical, 8)
                 }
             }
+            
+            Button {
+                generator.generateQuiz()
+            } label: {
+                Text("Start a new quiz")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(generator.isGenerating)
         }
         .navigationTitle(generator.topic)
         .padding()

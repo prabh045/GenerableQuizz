@@ -13,15 +13,45 @@ struct QuizView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.gray.opacity(0.1)
-                    .edgesIgnoringSafeArea(.all)
-                ScrollView {
-                    quizStack
-                }
+                content
             }
         }
         .onAppear {
             generator.generateQuiz()
+        }
+    }
+    
+    @ViewBuilder
+    private var content: some View {
+        let lastQuestion = generator.quiz?.questions?.last
+        
+        Color.gray.opacity(0.1)
+            .edgesIgnoringSafeArea(.all)
+        
+        ScrollViewReader { value in
+            ScrollView {
+                quizStack
+            }
+            .onChange(of: lastQuestion?.answers?.count) { oldValue, newValue in
+                withAnimation {
+                    value.scrollTo(lastQuestion?.id)
+                }
+            }
+            .onChange(of: generator.isGenerating) {
+                withAnimation {
+                    value.scrollTo(generator.quiz?.questions?.first?.id)
+                }
+            }
+        }
+            
+        if generator.isGenerating {
+            HStack {
+                ProgressView()
+                Text("Generating...")
+            }
+            .frame(width: 200, height: 75)
+            .background(.ultraThinMaterial)
+            .clipShape(RoundedRectangle(cornerRadius: 16.0))
         }
     }
     

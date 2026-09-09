@@ -26,7 +26,9 @@ class QuizGenerator {
         
         run {
             for try await partialData in stream {
-                self.quiz = partialData.content
+                withAnimation {
+                    self.quiz = partialData.content
+                }
             }
         }
     }
@@ -45,15 +47,19 @@ class QuizGenerator {
         let stream = session.streamResponse(to: prompt, generating: Question.self)
         run {
             for try await partial in stream {
-                quiz.questions?[index] = partial.content
-                self.quiz = quiz
+                withAnimation {
+                    quiz.questions?[index] = partial.content
+                    self.quiz = quiz
+                }
             }
         }
     }
     
     func run(session: @escaping () async throws -> Void) {
         Task {
-            isGenerating = true
+            withAnimation {
+                isGenerating = true
+            }
             error = nil
             do {
                 try await session()
